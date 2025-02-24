@@ -122,8 +122,6 @@ The **Chef Booking Web Application** is designed to connect users with professio
 
 ---
 
-## **License**
-This project is licensed under the **MIT License** – see the LICENSE file for details.
 
 ---
 
