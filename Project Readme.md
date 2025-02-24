@@ -128,8 +128,8 @@ This project is licensed under the **MIT License** – see the LICENSE file for 
 ---
 
 ## **Contributors**
-- **Your Name**
-- **Team Members (if applicable)**
+- **Pavithra Kandavel**
+- 
 ## **How to Contribute to the Project**
 We welcome contributions from the community! To contribute:
 
