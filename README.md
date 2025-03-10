@@ -39,8 +39,8 @@ The **Chef Booking Web Application** is designed to connect users with professio
 ### **Frontend Setup**
 1. **Clone the repository**:
    ```sh
-   git clone https://github.com/your-username/chef-booking.git
-   cd chef-booking
+   git clone https://github.com/PavithraKandavel/TheChefBookingSystemProject.git
+   cd Chef Booking Project
    ```
 
 2. **Open the project in VS Code**.
@@ -134,7 +134,7 @@ We welcome contributions from the community! To contribute:
 1. **Fork the repository** on GitHub.
 2. **Clone your fork**:
    ```sh
-   git clone https://github.com/your-username/chef-booking.git
+   git clone https://github.com/PavithraKandavel/TheChefBookingSystemProject.git
    ```
 3. **Create a new branch**:
    ```sh
