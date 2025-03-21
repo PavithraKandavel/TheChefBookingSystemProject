@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import {Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, Paper, TextField, Typography } from "@mui/material";
 import signupimg from "../../Images/signupimg.png";
-import signupuserimg from "../../Images/signupuser.jpg";
+import signupimg1 from "../../Images/signupimg1.jpg";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -11,7 +11,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import { postApihandler } from "../../Apihandler";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-
+import PersonIcon from '@mui/icons-material/Person';
+import OutdoorGrillIcon from '@mui/icons-material/OutdoorGrill';
 const countryCodeList = [
   {
     code: "AF",
@@ -1228,23 +1229,26 @@ const countryCodeList = [
 ];
 export default function Signup() {
   const [value, setValue] = React.useState("1");
-  const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const [phonenumber, setphonenumber] = useState("");
-  const [country_code, setCountryCode] = React.useState();
-  const [chefname, setChefName] = useState("");
-  const [chefemail, setChefEmail] = useState("");
-  const [chefpassword, setChefPassword] = useState("");
-  const [chefconfirmpassword, setChefConfirmPassword] = useState("");
-  const [chefnumber, setChefNumber] = useState("");
-  const [chefcountrycode, setChefCountryCode] = useState("");
 
-  const handleChange = (event,newValue) => {
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  // console.log("name is --->", name);
+
+  const [email, setEmail] = useState("");
+  // console.log("email is --->", email);
+
+  const [password, setPassword] = useState("");
+  // console.log("password is --->", password);
+
+  const [confirmpassword, setConfirmPassword] = useState("");
+  // console.log("confirmpassword is --->", confirmpassword);
+  const [phonenumber, setphonenumber] = useState("");
+
+  const [country_code, setCountryCode] = React.useState();
   // ***** user signup *******
   const userSignup = async (e) => {
     e.preventDefault();
@@ -1269,6 +1273,12 @@ export default function Signup() {
   };
 
   // ******** chef signup **********
+  const [chefname, setChefName] = useState("");
+  const [chefemail, setChefEmail] = useState("");
+  const [chefpassword, setChefPassword] = useState("");
+  const [chefconfirmpassword, setChefConfirmPassword] = useState("");
+  const [chefnumber, setChefNumber] = useState("");
+  const [chefcountrycode, setChefCountryCode] = useState("");
   const chefSignUp = async (e) => {
     e.preventDefault();
     const data = {
@@ -1295,399 +1305,307 @@ export default function Signup() {
     <>
       <Container className="mt-5">
         <Row className="">
-          <Col xs={12} md={7}>
-          {/* signup image */}
-          {
-            value === "1"?
-            <div>
-            <img src={signupuserimg} className="mt-5" style={{width:"100%"}}/>
-          </div>
-          :
-          <div>
-              <img src={signupimg} className="mt-5" />
-            </div>
-          }
-            
-          </Col>
-          <Col xs={12} md={5}>
-           
+          
+          <Col xs={12} md={12}>
+            {/* <h2 className="text-center">Chef Booking - Signup</h2> */}
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <TabList
+                  variant="fullWidth"
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                   >
-                    <Tab label="User" value="1" />
-                    <Tab label="Chef" value="2" />
+                    <Tab icon={<PersonIcon />} sx={{color:""}} label="User" value="1" />
+                    <Tab icon={<OutdoorGrillIcon />} label="Chef" value="2" />
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                  <h6>User </h6>
-                  <form
-                    component="form"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      textAlign: "center",
-                      padding: "30px",
-                      borderRadius: "10px",
-                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                    }}
-                    onSubmit={userSignup}
-                  >
-                    <div className="">
-                      <input
-                        type="text"
-                        label=""
-                        placeholder="Full Name"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="email"
-                        label=""
-                        placeholder="email"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className=" col-4">
-                        <select
-                          id="country_code"
-                          name="country_code"
-                          required
-                          className="w-full px-4 py-2   focus:outline-none focus:ring-2 focus:ring-purple-600"
-                          onChange={(e) => setCountryCode(e.target.value)}
-                          style={{
-                            borderRadius: "12px",
-                            marginRight: "10px",
-                            border: "1px solid #000",
-                            width: "100%",
-                            height: "40px",
-                            borderRadius: "10px",
-                            padding: "10px",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            marginBottom: "20px",
-                          }}
-                          // style={{
-                          //   border: "2px solid #666",
-                          //   borderRadius: "0.5rem",
-                          //   width: "20%",
-                          //   padding: "0.375rem 0.75rem",
-                          //   marginRight: "0.5rem",
-                          //   zIndex: 1,
-                          // }}
-                        >
-                          {countryCodeList.map((val, ind) => (
-                            <option value={`+${val.phoneCode}`} key={ind}>
-                              {val.countryFlag} +{val.phoneCode}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="cols col-8">
-                        <input
-                          type="tel"
-                          placeholder="Mobile Number"
-                          className=" px-4 py-2  focus:outline-none focus:ring-2"
-                          onChange={(e) => setphonenumber(e.target.value)}
-                          style={{
-                            borderRadius: "12px",
-                            // width: "40%",
-                            marginRight: "10px",
-                            border: "1px solid #000",
-                            width: "100%",
-                            height: "40px",
-                            borderRadius: "10px",
-                            padding: "10px",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            marginBottom: "20px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Confirm Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        style={{ backgroundColor: "#E3641B", color: "white" }}
-                      >
-                        Sign Up
-                      </Button>
-                    </div>
-                    <Typography
-                      variant="body2"
-                      textAlign="center"
-                      sx={{
-                        fontFamily: "Inter;",
-                        fontSize: "14px;",
-                        fontWeight: "500",
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      Already have an account?{" "}
-                      <a
+                <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${signupimg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={5}
+          sx={{
+            padding: 4,
+            borderRadius: 3,
+            textAlign: "center",
+            maxWidth: 400,
+            margin: "auto",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
+            USER SIGNUP
+          </Typography>
+
+          <form onSubmit={userSignup}>
+            <TextField
+              fullWidth
+              label="Your Name"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Your Email"
+              type="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              required
+            />
+
+<TextField
+              fullWidth
+              label="Country Code"
+              variant="outlined"
+              value={country_code}
+              onChange={(e) => setCountryCode(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Phone Number"
+              type="tel"
+              variant="outlined"
+              value={phonenumber}
+              onChange={(e) => setphonenumber(e.target.value)}
+              margin="normal"
+              required
+            />
+
+         
+
+<TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={confirmpassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                 
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  I agree to all statements in{" "}
+                 
+                </Typography>
+              }
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                mt: 2,
+                py: 1.5,
+                fontWeight: "bold",
+                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
+                color: "white",
+                "&:hover": {
+                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
+                },
+              }}
+            >
+              REGISTER
+            </Button>
+          </form>
+
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            Have already an account?{" "}
+            <a
                         href="/login"
                         style={{
                           textDecoration: "none",
-                          color: "#E3641B",
+                          color: "#03a9f4",
                           fontWeight: "700",
                         }}
                       >
                         Log in
                       </a>
-                    </Typography>
-                  </form>
+          </Typography>
+        </Paper>
+      </Container>
+    </Box>
                 </TabPanel>
                 <TabPanel value="2">
-                  <h6>Chef</h6>
-                  <form
-                    component="form"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      textAlign: "center",
-                      padding: "30px",
-                      borderRadius: "10px",
-                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                    }}
-                    onSubmit={chefSignUp}
-                  >
-                    <div className="">
-                      <input
-                        type="text"
-                        label=""
-                        placeholder="Chef Name"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefName(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="email"
-                        label=""
-                        placeholder="Chef Email"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefEmail(e.target.value)}
-                      />
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className=" col-4">
-                        <select
-                          id="country_code"
-                          name="country_code"
-                          required
-                          className="w-full px-4 py-2   focus:outline-none focus:ring-2 focus:ring-purple-600"
-                          onChange={(e) => setChefCountryCode(e.target.value)}
-                          style={{
-                            borderRadius: "12px",
-                            // width: "40%",
-                            marginRight: "10px",
-                            border: "1px solid #000",
-                            width: "100%",
-                            height: "40px",
-                            borderRadius: "10px",
-                            padding: "10px",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            marginBottom: "20px",
-                          }}
-                          // style={{
-                          //   border: "2px solid #666",
-                          //   borderRadius: "0.5rem",
-                          //   width: "20%",
-                          //   padding: "0.375rem 0.75rem",
-                          //   marginRight: "0.5rem",
-                          //   zIndex: 1,
-                          // }}
-                        >
-                          {countryCodeList.map((val, ind) => (
-                            <option value={`+${val.phoneCode}`} key={ind}>
-                              {val.countryFlag} +{val.phoneCode}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="cols col-8">
-                        <input
-                          type="tel"
-                          placeholder="Mobile Number"
-                          className=" px-4 py-2  focus:outline-none focus:ring-2"
-                          onChange={(e) => setChefNumber(e.target.value)}
-                          style={{
-                            borderRadius: "12px",
-                            // width: "40%",
-                            marginRight: "10px",
-                            border: "1px solid #000",
-                            width: "100%",
-                            height: "40px",
-                            borderRadius: "10px",
-                            padding: "10px",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                            marginBottom: "20px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefPassword(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Confirm Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefConfirmPassword(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        style={{ backgroundColor: "#E3641B", color: "white" }}
-                      >
-                        Sign Up
-                      </Button>
-                    </div>
-                    <Typography
-                      variant="body2"
-                      textAlign="center"
-                      sx={{
-                        fontFamily: "Inter;",
-                        fontSize: "14px;",
-                        fontWeight: "500",
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      Already have an account?{" "}
-                      <a
-                        href="/login"
-                        style={{
-                          textDecoration: "none",
-                          color: "#E3641B",
-                          fontWeight: "700",
-                        }}
-                      >
-                        Log in
-                      </a>
-                    </Typography>
-                  </form>
+                
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${signupimg1})`, // Ensure correct path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={5}
+          sx={{
+            padding: 4,
+            borderRadius: 3,
+            textAlign: "center",
+            maxWidth: 400,
+            margin: "auto",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
+            CHEF SIGNUP
+          </Typography>
+
+          <form onSubmit={chefSignUp}>
+            <TextField
+              fullWidth
+              label="Your Name"
+              variant="outlined"
+              value={chefname}
+              onChange={(e) => setChefName(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Your Email"
+              type="email"
+              variant="outlined"
+              value={chefemail}
+              onChange={(e) => setChefEmail(e.target.value)}
+              margin="normal"
+              required
+            />
+
+           
+
+<TextField
+              fullWidth
+              label="Country Code"
+              variant="outlined"
+              value={chefcountrycode}
+              onChange={(e) => setChefCountryCode(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Phone Number"
+              type="tel"
+              variant="outlined"
+              value={chefnumber}
+              onChange={(e) => setChefNumber(e.target.value)}
+              margin="normal"
+              required
+            />
+
+
+
+<TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={chefpassword}
+              onChange={(e) => setChefPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={chefconfirmpassword}
+              onChange={(e) => setChefConfirmPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+            <FormControlLabel
+              control={<Checkbox />}
+              label={
+                <Typography variant="body2">
+                  I agree to all statements in{" "}
+                  <a href="/terms" style={{ color: "#03a9f4", fontWeight: 600 }}>
+                    Terms of Service
+                  </a>
+                </Typography>
+              }
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                mt: 2,
+                py: 1.5,
+                fontWeight: "bold",
+                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
+                color: "white",
+                "&:hover": {
+                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
+                },
+              }}
+            >
+              REGISTER
+            </Button>
+          </form>
+
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            Already have an account?{" "}
+            <a
+              href="/login"
+              style={{
+                textDecoration: "none",
+                color: "#03a9f4",
+                fontWeight: "700",
+              }}
+            >
+              Log in
+            </a>
+          </Typography>
+        </Paper>
+      </Container>
+    </Box>
                 </TabPanel>
               </TabContext>
             </Box>

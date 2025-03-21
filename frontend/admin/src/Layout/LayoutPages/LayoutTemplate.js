@@ -140,42 +140,42 @@ export default function LayoutTemplate({ children }) {
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open} className="bg-yellow-ping-grad">
-          <Toolbar
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              backgroundColor: "#FF7F00",
-            }}
-          >
-            <IconButton
-              edge="start"
-              backgroundColor="black"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
+          <AppBar position="absolute" open={open} className="bg-yellow-ping-grad">
+            <Toolbar
               sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
+                display: "flex",
+                justifyContent: "space-between",
+                backgroundColor: "#FF7F00",
               }}
             >
-              <MenuIcon sx={{ color: "white" }} />
-            </IconButton>
-            {/* <img src={logo} /> */}
-            <IconButton color="secondry">
-              <Badge
-                // badgeContent={4}
+              <IconButton
+                edge="start"
+                backgroundColor="black"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
                 sx={{
-                  backgroundColor: "white",
-                  borderRadius: "50%",
-                  padding: "7px",
-                  color: "#FF7F00",
+                  marginRight: "36px",
+                  ...(open && { display: "none" }),
                 }}
               >
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
+                <MenuIcon sx={{ color: "white" }} />
+              </IconButton>
+              {/* <img src={logo} /> */}
+              <IconButton color="secondry">
+                <Badge
+                  // badgeContent={4}
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "50%",
+                    padding: "7px",
+                    color: "#FF7F00",
+                  }}
+                >
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            </Toolbar>
+          </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{

@@ -7,7 +7,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Dashboard from "./Pages/Dashboard";
 import Users from "./Pages/Users";
 import Chef from "./Pages/Chef";
-import Category from "./Pages/Category";
 function App() {
   return (
     <div className="App">
@@ -18,7 +17,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/chefs" element={<Chef />} />
-          <Route path="/category" element={<Category />} />
         </Routes>
       </BrowserRouter>
     </div>

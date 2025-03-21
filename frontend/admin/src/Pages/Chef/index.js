@@ -35,23 +35,17 @@ const style = {
 };
 export default function Chef() {
   const [open, setOpen] = React.useState(false);
-  const [chefname, setChefName] = useState("");
-  const [chefemail, setChefEmail] = useState("");
-  const [countrycode, setCountryCode] = useState("");
-  const [number, setNumber] = useState("");
-  const [chefid, setChefId] = useState();
-  const [index, setIndex] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [data, setData] = useState([]);
-  
+  console.log("data is ---->", data);
   useEffect(() => {
     getChef();
   }, []);
   //   ***** get all chefs ********
   const getChef = async () => {
     const res = await getApihandler("/getAllChefs");
- 
+    console.log("get all  chefs api respons is ---->", res);
     if (res.message === "Chefs fetched successfully") {
       setData(res.data);
     }
@@ -76,11 +70,17 @@ export default function Chef() {
   };
 
   // ********* update chefs ***********
-  
+  const [chefname, setChefName] = useState("");
+  const [chefemail, setChefEmail] = useState("");
+  const [countrycode, setCountryCode] = useState("");
+  const [number, setNumber] = useState("");
+  const [chefid, setChefId] = useState();
+  const [index, setIndex] = useState();
   useEffect(() => {
     if (index !== null && data[index]) {
       const { chef_Name, chef_Email, country_code, mobile_no } =
         data[index] || {};
+
       setChefName(chef_Name || "");
       setChefEmail(chef_Email || "");
       setCountryCode(country_code || "");
@@ -126,7 +126,7 @@ export default function Chef() {
           <TableBody>
             {data.map((chef) => (
               <TableRow
-               
+                // key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">

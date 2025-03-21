@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import Header from "../../Components/Header";
+import Footer from "../../Components/Footer";
+import { useForm } from "react-hook-form";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Typography } from "@mui/material";
-import signupimg from "../../Images/signupimg.png";
-import signupuserimg from "../../Images/signupuser.jpg";
+import { Checkbox, FormControlLabel, Paper, TextField, Typography } from "@mui/material";
+import signupimg from "../../Images/signupimg2.jpg";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import Box from "@mui/material/Box";
@@ -14,14 +16,13 @@ import { postApihandler } from "../../Apihandler";
 
 export default function Login() {
   const [value, setValue] = React.useState("1");
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
- 
- 
   // ********* user login **********
   const userLogin = async (e) => {
     e.preventDefault();
@@ -29,7 +30,9 @@ export default function Login() {
       user_Email: email,
       password: password,
     };
+    console.log("login data is --->", data);
     const res = await postApihandler("/userLogin", data);
+    console.log("login api response is ------->", res);
     localStorage.setItem("userData", JSON.stringify(res.data));
     if (res.status === 200) {
       swal(" Login Successfully");
@@ -63,26 +66,14 @@ export default function Login() {
     <>
       <Container className="mt-5">
         <Row className="">
-          <Col xs={12} md={7}>
-            {/* signup image */}
-            {
-              value === "1" ?
-                <div>
-                  <img src={signupuserimg} className="mt-5" style={{ width: "100%" }} />
-                </div>
-                :
-                <div>
-                  <img src={signupimg} className="mt-5" />
-                </div>
-            }
-
-          </Col>
-          <Col xs={12} md={5}>
+        
+          <Col xs={12} md={12}>
             {/* <h2 className="text-center">Chef Booking - Signup</h2> */}
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <TabList
+                   variant="fullWidth"
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                   >
@@ -91,84 +82,87 @@ export default function Login() {
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                  <h6>User</h6>
-                  <form
-                    component="form"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      textAlign: "center",
-                      padding: "30px",
-                      borderRadius: "10px",
-                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                    }}
-                    onSubmit={userLogin}
-                  >
-                    {/* <div className="text-center">
-                <img src={cheflogo} height="100px" width="100px"  style={{objectFit:"cover"}}/>
-              </div> */}
-                    <div className="mt-4">
-                      <input
-                        type="email"
-                        label=""
-                        placeholder="email"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </div>
+                <Box
+      sx={{
+        minHeight: "80vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${signupimg})`, // Ensure correct path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={5}
+          sx={{
+            padding: 4,
+            borderRadius: 3,
+            textAlign: "center",
+            maxWidth: 400,
+            margin: "auto",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
+            User Login
+          </Typography>
 
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                    <div className="text-end">
-                      <a
-                        href="/resetpassword"
-                        style={{
-                          textDecoration: "none",
-                          color: "#E3641B",
-                          fontWeight: "600",
-                        }}
-                      >
-                        <h6>Forgot Password ?</h6>
-                      </a>
-                    </div>
-                    <div>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        style={{ backgroundColor: "#E3641B", color: "white" }}
-                      >
-                        Log In
-                      </Button>
-                    </div>
-                    <Typography
+          <form onSubmit={userLogin}>
+            <TextField
+              fullWidth
+              label="Your Email"
+              type="email"
+              variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <FormControlLabel
+              control={<Checkbox />}
+              label={
+                <Typography variant="body2">
+                  I agree to the{" "}
+                  <a href="#" style={{ color: "#03a9f4", fontWeight: 600 }}>
+                    Terms & Conditions
+                  </a>
+                </Typography>
+              }
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                mt: 2,
+                py: 1.5,
+                fontWeight: "bold",
+                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
+                color: "white",
+                "&:hover": {
+                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
+                },
+              }}
+            >
+              Login
+            </Button>
+          </form>
+
+          <Typography
                       variant="body2"
                       textAlign="center"
                       sx={{
@@ -191,87 +185,92 @@ export default function Login() {
                         Sign Up
                       </a>
                     </Typography>
-                  </form>
+        </Paper>
+      </Container>
+    </Box>
                 </TabPanel>
                 <TabPanel value="2">
-                  <h6>Chef</h6>
-                  <form
-                    component="form"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                      textAlign: "center",
-                      padding: "30px",
-                      borderRadius: "10px",
-                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                    }}
-                    onSubmit={chefLogin}
-                  >
-                    {/* <div className="text-center">
-                <img src={cheflogo} height="100px" width="100px"  style={{objectFit:"cover"}}/>
-              </div> */}
-                    <div className="mt-4">
-                      <input
-                        type="email"
-                        label=""
-                        placeholder="Chef Email"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefEmail(e.target.value)}
-                      />
-                    </div>
+                <Box
+      sx={{
+        minHeight: "80vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundImage: `url(${signupimg})`, // Ensure correct path
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={5}
+          sx={{
+            padding: 4,
+            borderRadius: 3,
+            textAlign: "center",
+            maxWidth: 400,
+            margin: "auto",
+            backdropFilter: "blur(10px)",
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold" gutterBottom>
+            Chef Login
+          </Typography>
 
-                    <div>
-                      <input
-                        type="password"
-                        label=""
-                        placeholder="Password"
-                        fullWidth
-                        style={{
-                          border: "1px solid #000",
-                          width: "100%",
-                          height: "40px",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          marginBottom: "20px",
-                        }}
-                        onChange={(e) => setChefPassword(e.target.value)}
-                      />
-                    </div>
-                    <div className="text-end">
-                      <a
-                        href="/resetpassword"
-                        style={{
-                          textDecoration: "none",
-                          color: "#E3641B",
-                          fontWeight: "600",
-                        }}
-                      >
-                        <h6>Forgot Password ?</h6>
-                      </a>
-                    </div>
-                    <div>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        style={{ backgroundColor: "#E3641B", color: "white" }}
-                      >
-                        Log In
-                      </Button>
-                    </div>
-                    <Typography
+          <form onSubmit={chefLogin}>
+            <TextField
+              fullWidth
+              label="Your Email"
+              type="email"
+              variant="outlined"
+              value={chefemail}
+              onChange={(e) => setChefEmail(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={chefpassword}
+              onChange={(e) => setChefPassword(e.target.value)}
+              margin="normal"
+              required
+            />
+
+            <FormControlLabel
+              control={<Checkbox />}
+              label={
+                <Typography variant="body2">
+                  I agree to the{" "}
+                  <a href="#" style={{ color: "#03a9f4", fontWeight: 600 }}>
+                    Terms & Conditions
+                  </a>
+                </Typography>
+              }
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              sx={{
+                mt: 2,
+                py: 1.5,
+                fontWeight: "bold",
+                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
+                color: "white",
+                "&:hover": {
+                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
+                },
+              }}
+            >
+              Login
+            </Button>
+          </form>
+
+          <Typography
                       variant="body2"
                       textAlign="center"
                       sx={{
@@ -294,7 +293,9 @@ export default function Login() {
                         Sign Up
                       </a>
                     </Typography>
-                  </form>
+        </Paper>
+      </Container>
+    </Box>
                 </TabPanel>
               </TabContext>
             </Box>

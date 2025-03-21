@@ -1,7 +1,5 @@
 module.exports = (app)=> {
-    const admin = require('../controllers/admin.controller');
-    const category = require('../controllers/category.controller');
-
+    const admin = require('../controllers/admin.controller')
     
     // create admin
     app.post('/api/createAdmin', admin.createAdmin);
@@ -26,11 +24,4 @@ module.exports = (app)=> {
 
     // Delete chef route
     app.delete('/api/deleteChef/:chefId', admin.deleteChef);
-
-
-    // Category routes
-    app.post('/api/admin/categories', category.createCategory); // Create a category
-    app.get('/api/admin/getAllCategories', category.getAllCategories); // Get all categories
-    app.put('/api/admin/updateCategory/:categoryId', category.updateCategory); // Update a category
-    app.delete('/api/admin/deleteCategory/:categoryId', category.deleteCategory); // Delete a category
 }
