@@ -7,6 +7,8 @@ import Signup from "./Pages/Signup";
 import ResetPassword from "./Pages/ResetPassword";
 import Home from "./Pages/Home";
 import ChefAvailability from "./Pages/Chefavailability";
+import LandingPage from "./Pages/LandingPage";
+import SearchResults from "./Pages/SearchResults";
 function App() {
   return (
     <div className="App">
@@ -16,7 +18,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
-          {/* <Route path="/chefavailablity" element={<ChefAvailability />} /> */}
+          <Route path="/chefavailablity" element={<ChefAvailability />} />
+          <Route path="/home" element={<LandingPage />} />
+          <Route path="/search-results" element={<SearchResults />} />
         </Routes>
       </BrowserRouter>
     </div>

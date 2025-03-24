@@ -3,7 +3,9 @@ const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
-const user = require('../models/user.model')
+const user = require('../models/user.model');
+
+const Message = require('../models/message.model')
 
 
 function generateToken(userid) {
@@ -227,6 +229,69 @@ exports.changeUserPassword = async (req, res) => {
         return res.status(500).send({ message: err.message || 'Error changing password', status: 500 });
     }
 };
+
+
+
+//messages functionality
+
+exports.sendMessage = async (req, res) => {
+  try {
+      const { user_Id, chef_Id, senderType, messageText } = req.body;
+
+      if (!user_Id || !chef_Id || !senderType || !messageText) {
+          return res.status(400).json({ message: "All fields are required." });
+      }
+
+      // senderId and receiverId logic based on senderType
+      let senderId, receiverId;
+      if (senderType === 'user') {
+          senderId = user_Id;
+          receiverId = chef_Id;
+      } else if (senderType === 'vendor') {
+          senderId = chef_Id;
+          receiverId = user_Id;
+      } else {
+          return res.status(400).json({ message: "Invalid sender type." });
+      }
+
+      const message = new Message({
+          user_Id,
+          chef_Id,
+          senderType,
+          senderId,
+          receiverId,
+          messageText
+      });
+
+      await message.save();
+
+      return res.status(201).json({ message: "Message sent successfully.", data: message });
+
+  } catch (error) {
+      console.error("Error in sendMessage:", error);
+      return res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.getMessages = async (req, res) => {
+  try {
+      const { user_Id, chef_Id } = req.query;
+
+      if (!user_Id || !chef_Id) {
+          return res.status(400).json({ message: "User ID and Vendor ID are required." });
+      }
+
+      const messages = await Message.find({ user_Id, chef_Id }).sort({ timestamp: 1 });
+
+      return res.status(200).json({ message: "Messages retrieved successfully.", data: messages });
+
+  } catch (error) {
+      console.error("Error in getMessages:", error);
+      return res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 

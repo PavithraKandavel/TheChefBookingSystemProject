@@ -8,5 +8,9 @@ module.exports = (app)=>{
 
     app.put('/api/changeUserPassword/:usersRegId', user.changeUserPassword);
 
+    app.post('/api/sendMessage', user.sendMessage);
+    
+    app.get('/api/getMessages', user.getMessages);
+
     
 }

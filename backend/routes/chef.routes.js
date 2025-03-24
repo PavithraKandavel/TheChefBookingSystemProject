@@ -9,7 +9,15 @@ module.exports = (app)=>{
     app.put('/api/changechefPassword/:chefsRegId', chef.changechefPassword);
 
     
+ // Availability routes
+ app.post('/api/chefAvailability', chef.createChefAvailability);
 
-  
+ app.get('/api/chef-availability/:chefId', chef.getChefAvailabilityById);
+
+ app.put('/api/chefAvailability/:availabilityId', chef.updateChefAvailability); // Correct route
+
+ app.get('/api/chefs/search', chef.searchChefs);
+
+ 
 
 }

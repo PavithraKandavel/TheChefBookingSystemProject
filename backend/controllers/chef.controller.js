@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
-const chef = require('../models/chef.model')
+const { chef, ChefAvailability } = require('../models/chef.model');
 
 
 function generateToken(chefid) {
@@ -154,7 +154,6 @@ exports.chefSignUp = async (req, res) => {
 };
 
 
-
 exports.chefLogin = async (req, res) => {
     try {
         const chef_Email = (req.body.chef_Email || '').toLowerCase();
@@ -182,10 +181,6 @@ exports.chefLogin = async (req, res) => {
         return res.status(500).send({ message: 'Internal server error.', status: 500 });
     }
 };
-
-
-
-
 
 
 exports.changechefPassword = async (req, res) => {
@@ -229,6 +224,113 @@ exports.changechefPassword = async (req, res) => {
 };
 
 
+exports.createChefAvailability = async (req, res) => {
+  try {
+      const { chefId, days, startTime, endTime, country, state, city, price,chefCategory} = req.body;
+
+      const newAvailability = await ChefAvailability.create({
+          chefId,
+          days,
+          startTime,
+          endTime,
+          country,
+          state,
+          city,
+          price,
+      chefCategory
+
+      });
+
+      return res.status(200).send({ data: newAvailability, message: "Availability created successfully", status: 200 });
+  } catch (error) {
+      return res.status(500).send({ message: error.message, status: 500 });
+  }
+};
+
+exports.getChefAvailabilityById = async (req, res) => {
+  try {
+    const chefAvailability = await ChefAvailability.find({ chefId: req.params.chefId });
+
+    if (!chefAvailability.length) {
+      return res.status(404).json({ message: "No availability found for this chef" });
+    }
+
+    res.json(chefAvailability);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error });
+  }
+};
+
+exports.updateChefAvailability = async (req, res) => {
+  try {
+      const { availabilityId } = req.params;
+      const { days, startTime, endTime, country, state, city, price, chefCategory} = req.body;
+
+      const updatedAvailability = await ChefAvailability.findByIdAndUpdate(
+          availabilityId,
+          {
+              days,
+              startTime,
+              endTime,
+              country,
+              state,
+              city,
+              price,
+              chefCategory
+          },
+          { new: true } // Return the updated document
+      );
+
+      if (!updatedAvailability) {
+          return res.status(404).send({ message: "Availability not found", status: 404 });
+      }
+
+      return res.status(200).send({ data: updatedAvailability, message: "Availability updated successfully", status: 200 });
+  } catch (error) {
+      return res.status(500).send({ message: error.message, status: 500 });
+  }
+};
+
+exports.searchChefs = async (req, res) => {
+  try {
+    const { country, state, city, chefCategory } = req.query;
+
+    // Build dynamic search filters
+    let filters = {};
+    if (country) filters.country = country;
+    if (state) filters.state = state;
+    if (city) filters.city = city;
+
+    // First, find all chefs matching the category if provided
+    let chefFilter = {};
+    if (chefCategory) chefFilter.category = chefCategory; // Ensure correct field name
+
+    const matchingChefs = await chef.find(chefFilter).select("_id"); // Fetch only chef IDs
+    const chefIds = matchingChefs.map((chef) => chef._id); // Extract chef IDs
+
+    // If a category filter is applied but no matching chefs found, return an empty response
+    if (chefCategory && chefIds.length === 0) {
+      return res.status(200).json({ data: [], message: "No chefs found for this category", status: 200 });
+    }
+
+    // Apply chefId filter only if category was provided and matches
+    if (chefCategory) filters.chefId = { $in: chefIds };
+
+    // Find chef availability records
+    const chefAvailability = await ChefAvailability.find(filters).populate({
+      path: "chefId",
+      select: "name category",
+    });
+
+    if (chefAvailability.length === 0) {
+      return res.status(200).json({ data: [], message: "No chefs found", status: 200 });
+    }
+
+    res.status(200).json({ data: chefAvailability, status: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
 
 
 

@@ -11,17 +11,20 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+import { postApihandler } from "../../Apihandler";
+import Swal from "sweetalert2";
+import Header from "../../Components/Header";
 
 export default function ChefAvailability() {
   const [chefCategory, setChefCategory] = useState("");
   const [availability, setAvailability] = useState([]);
-  const [location, setLocation] = useState({
-    country: "",
-    state: "",
-    city: "",
-  });
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
   const [time, setTime] = useState("");
   const [endtime, setEndTime] = useState("");
+  const [price, setPrice] = useState(0);
+  
   const daysOfWeek = [
     "Monday",
     "Tuesday",
@@ -39,20 +42,48 @@ export default function ChefAvailability() {
     );
   };
 
-  const handleSubmit = (e) => {
+  const addAvailability = async (e) => {
     e.preventDefault();
-    const formData = { chefCategory, availability, location, time };
-    console.log("Submitted Data:", formData);
-    // API call can be made here
+    const chefId = localStorage.getItem("userData");
+    const Id = JSON.parse(chefId);
+    console.log("chef id ---->", Id);
+    if (!chefId) {
+      console.error("Chef ID not found in local storage");
+      return;
+    }
+    const data = {
+      chefId: Id._id,
+      days: availability,
+      startTime: time,
+      endTime: endtime,
+      country: country,
+      state: state,
+      city: city,
+      price:price,
+      chefCategory:chefCategory
+    };
+    console.log("data is --->", data);
+    const res = await postApihandler("/chefAvailability", data);
+    console.log("add availabilty api response is --->", res);
+    if (res.message === "Availability created successfully") {
+      Swal.fire({
+        // title: "Good job!",
+        text: "Availability created successfully",
+        icon: "success",
+      });
+    } else {
+      Swal.fire("Error", res.message || "An unknown error occurred.", "error");
+    }
   };
   return (
     <>
+    <Header/>
       <h2>Chef Availability</h2>
 
       <Container className="mt-4 d-flex justify-content-center py-3">
         <Box sx={{ width: "500px" }}>
-          <Form onSubmit={handleSubmit}>
-            {/* Chef Category Selection */}
+          <Form>
+            {/* {/ Chef Category Selection /} */}
             <FormControl fullWidth className="mb-3">
               <InputLabel>Chef Category</InputLabel>
               <Select
@@ -63,12 +94,18 @@ export default function ChefAvailability() {
                 <MenuItem value="South Indian">South Indian</MenuItem>
                 <MenuItem value="Chinese">Chinese</MenuItem>
                 <MenuItem value="Italian">Italian</MenuItem>
+                <MenuItem value="Italian">Continental</MenuItem>
+                <MenuItem value="Italian">Pastry & Bakery Chef</MenuItem>
+                <MenuItem value="Italian">Pan Asian</MenuItem>
+                <MenuItem value="Italian">Arabic</MenuItem>
+                <MenuItem value="Italian">Lebanese</MenuItem>
               </Select>
             </FormControl>
 
-            {/* Availability Selection */}
+            {/* {/ Availability Selection /} */}
             <FormGroup className="mb-3">
               <h5>Availability</h5>
+
               {daysOfWeek.map((day) => (
                 <FormControlLabel
                   key={day}
@@ -80,7 +117,7 @@ export default function ChefAvailability() {
               ))}
             </FormGroup>
 
-            {/* Time Selection */}
+            {/* {/ Time Selection /} */}
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3" style={{ textAlign: "left" }}>
@@ -105,15 +142,13 @@ export default function ChefAvailability() {
                 </Form.Group>
               </Col>
             </Row>
-            {/* Location Selection */}
+            {/* {/ Location Selection /} */}
             <Form.Group className="mb-3" style={{ textAlign: "left" }}>
               <Form.Label>Country</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter country"
-                onChange={(e) =>
-                  setLocation({ ...location, country: e.target.value })
-                }
+                onChange={(e) => setCountry(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3" style={{ textAlign: "left" }}>
@@ -121,9 +156,7 @@ export default function ChefAvailability() {
               <Form.Control
                 type="text"
                 placeholder="Enter state"
-                onChange={(e) =>
-                  setLocation({ ...location, state: e.target.value })
-                }
+                onChange={(e) => setState(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3" style={{ textAlign: "left" }}>
@@ -131,13 +164,19 @@ export default function ChefAvailability() {
               <Form.Control
                 type="text"
                 placeholder="Enter city"
-                onChange={(e) =>
-                  setLocation({ ...location, city: e.target.value })
-                }
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" style={{ textAlign: "left" }}>
+              <Form.Label>Price Per Hours</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter Price"
+                onChange={(e) => setPrice(e.target.value)}
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={addAvailability}>
               Submit
             </Button>
           </Form>

@@ -1,3 +1,3 @@
 module.exports = {
-    secret: "rapid-rescue-secure-secret-key"
+    secret: "chef-booking-secure-secret-key"
 };

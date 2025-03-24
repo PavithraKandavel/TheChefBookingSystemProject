@@ -1307,7 +1307,7 @@ export default function Signup() {
         <Row className="">
           
           <Col xs={12} md={12}>
-            {/* <h2 className="text-center">Chef Booking - Signup</h2> */}
+            
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

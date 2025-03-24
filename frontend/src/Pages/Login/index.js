@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import Header from "../../Components/Header";
-import Footer from "../../Components/Footer";
-import { useForm } from "react-hook-form";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Checkbox, FormControlLabel, Paper, TextField, Typography } from "@mui/material";
 import signupimg from "../../Images/signupimg2.jpg";
@@ -36,7 +33,7 @@ export default function Login() {
     localStorage.setItem("userData", JSON.stringify(res.data));
     if (res.status === 200) {
       swal(" Login Successfully");
-      navigate("/");
+      navigate("/home");
     } else {
       swal("Error", res.message || "An unknown error occurred.", "error");
     }
@@ -45,6 +42,7 @@ export default function Login() {
   // ********* chef login **********
   const [chefemail, setChefEmail] = useState("");
   const [chefpassword, setChefPassword] = useState("");
+ 
   const chefLogin = async (e) => {
     e.preventDefault();
     const data = {
@@ -54,21 +52,21 @@ export default function Login() {
     console.log("login data --->", data);
     const res = await postApihandler("/chefLogin", data);
     console.log("login api response is ------->", res);
-    localStorage.setItem("userData", JSON.stringify(res.data));
+   
     if (res.status === 200) {
+      localStorage.setItem("userData", JSON.stringify(res.data));
       swal(" Login Successfully");
-      navigate("/");
+      navigate("/chefavailablity");
     } else {
       swal("Error", res.message || "An unknown error occurred.", "error");
     }
   };
+
   return (
     <>
       <Container className="mt-5">
         <Row className="">
-        
           <Col xs={12} md={12}>
-            {/* <h2 className="text-center">Chef Booking - Signup</h2> */}
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>

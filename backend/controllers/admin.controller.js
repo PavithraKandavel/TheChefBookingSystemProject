@@ -4,7 +4,7 @@ const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const admin = require('../models/admin.model');
 const user = require("../models/user.model");
-const chef = require('../models/chef.model')
+const { chef } = require('../models/chef.model')
 
 
 function generateToken(userid) {
