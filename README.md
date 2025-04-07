@@ -40,7 +40,7 @@ The **Chef Booking Web Application** is designed to connect users with professio
 1. **Clone the repository**:
    ```sh
    git clone https://github.com/PavithraKandavel/TheChefBookingSystemProject.git
-   cd Chef Booking Project
+   cd TheChefBookingSystemProject
    ```
 
 2. **Open the project in VS Code**.
