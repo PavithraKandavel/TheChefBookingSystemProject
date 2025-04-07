@@ -78,7 +78,6 @@ export const putApihandler = async (endPoint, value) => {
 
     
   } catch (error) {
-    // console.log("error ");
     return { error };
   }
 };

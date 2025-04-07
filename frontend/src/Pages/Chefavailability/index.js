@@ -14,6 +14,7 @@ import {
 import { postApihandler } from "../../Apihandler";
 import Swal from "sweetalert2";
 import Header from "../../Components/Header";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function ChefAvailability() {
   const [chefCategory, setChefCategory] = useState("");
@@ -24,7 +25,7 @@ export default function ChefAvailability() {
   const [time, setTime] = useState("");
   const [endtime, setEndTime] = useState("");
   const [price, setPrice] = useState(0);
-  
+  const navigate = useNavigate();
   const daysOfWeek = [
     "Monday",
     "Tuesday",
@@ -59,8 +60,8 @@ export default function ChefAvailability() {
       country: country,
       state: state,
       city: city,
-      price:price,
-      chefCategory:chefCategory
+      price: price,
+      chefCategory: chefCategory,
     };
     console.log("data is --->", data);
     const res = await postApihandler("/chefAvailability", data);
@@ -71,13 +72,14 @@ export default function ChefAvailability() {
         text: "Availability created successfully",
         icon: "success",
       });
+      navigate("/chefavailable");
     } else {
       Swal.fire("Error", res.message || "An unknown error occurred.", "error");
     }
   };
   return (
     <>
-    <Header/>
+      <Header />
       <h2>Chef Availability</h2>
 
       <Container className="mt-4 d-flex justify-content-center py-3">

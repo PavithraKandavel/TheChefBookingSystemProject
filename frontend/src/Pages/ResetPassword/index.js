@@ -1240,7 +1240,7 @@ export default function ResetPassword() {
             </div>
           </Col>
           <Col xs={12} md={5}>
-            {/* <h2 className="text-center">Chef Booking - Signup</h2> */}
+           
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -1265,11 +1265,9 @@ export default function ResetPassword() {
                       borderRadius: "10px",
                       boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                     }}
-                    //   onSubmit={userSignup}
+                    
                   >
-                    {/* <div className="text-center">
-                <img src={cheflogo} height="100px" width="100px"  style={{objectFit:"cover"}}/>
-              </div> */}
+                  
                     <h5>Forgot and Reset Password</h5>
                     <p
                       className="mt-3"
@@ -1294,7 +1292,6 @@ export default function ResetPassword() {
                           fontWeight: "500",
                           marginBottom: "20px",
                         }}
-                        //   onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
 
@@ -1322,11 +1319,8 @@ export default function ResetPassword() {
                       borderRadius: "10px",
                       boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                     }}
-                    //   onSubmit={userSignup}
                   >
-                    {/* <div className="text-center">
-                <img src={cheflogo} height="100px" width="100px"  style={{objectFit:"cover"}}/>
-              </div> */}
+                   
                     <h5>Forgot and Reset Password</h5>
                     <p
                       className="mt-3"
@@ -1351,7 +1345,6 @@ export default function ResetPassword() {
                           fontWeight: "500",
                           marginBottom: "20px",
                         }}
-                        //   onChange={(e) => setEmail(e.target.value)}
                       />
                     </div>
 

@@ -1236,16 +1236,12 @@ export default function Signup() {
 
   const navigate = useNavigate();
   const [name, setName] = useState("");
-  // console.log("name is --->", name);
 
   const [email, setEmail] = useState("");
-  // console.log("email is --->", email);
 
   const [password, setPassword] = useState("");
-  // console.log("password is --->", password);
 
   const [confirmpassword, setConfirmPassword] = useState("");
-  // console.log("confirmpassword is --->", confirmpassword);
   const [phonenumber, setphonenumber] = useState("");
 
   const [country_code, setCountryCode] = React.useState();

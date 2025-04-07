@@ -25,7 +25,11 @@ const Banner = () => {
   const handleSearch = () => {
     // Redirect with search parameters
     navigate(
-      `/search-results?chefCategory=${encodeURIComponent(chefCategory)}&country=${encodeURIComponent(country)}&state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`
+      `/search-results?chefCategory=${encodeURIComponent(
+        chefCategory
+      )}&country=${encodeURIComponent(country)}&state=${encodeURIComponent(
+        state
+      )}&city=${encodeURIComponent(city)}`
     );
   };
 
@@ -37,7 +41,9 @@ const Banner = () => {
 
       <div className="right-side">
         <Container maxWidth="sm">
-          <Typography variant="h4" className="form-title">Find a Chef</Typography>
+          <Typography variant="h4" className="form-title">
+            Find a Chef
+          </Typography>
           <Typography variant="body1" className="form-subtitle">
             Fill in the details to search for the perfect chef.
           </Typography>
@@ -69,22 +75,34 @@ const Banner = () => {
             </FormControl>
 
             <TextField
-              fullWidth label="Country" placeholder="Enter country" variant="outlined" className="mb-3"
+              fullWidth
+              label="Country"
+              placeholder="Enter country"
+              variant="outlined"
+              className="mb-3"
               onChange={(e) => setCountry(e.target.value)}
             />
             <TextField
-              fullWidth label="State" placeholder="Enter state" variant="outlined" className="mb-3"
+              fullWidth
+              label="State"
+              placeholder="Enter state"
+              variant="outlined"
+              className="mb-3"
               onChange={(e) => setState(e.target.value)}
             />
             <TextField
-              fullWidth label="City" placeholder="Enter city" variant="outlined" className="mb-3"
+              fullWidth
+              label="City"
+              placeholder="Enter city"
+              variant="outlined"
+              className="mb-3"
               onChange={(e) => setCity(e.target.value)}
             />
 
             <Button
               variant="contained"
               fullWidth
-              onClick={()=>handleSearch()}
+              onClick={() => handleSearch()}
               sx={{
                 backgroundColor: "#8B4513",
                 color: "white",

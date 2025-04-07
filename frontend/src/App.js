@@ -9,6 +9,8 @@ import Home from "./Pages/Home";
 import ChefAvailability from "./Pages/Chefavailability";
 import LandingPage from "./Pages/LandingPage";
 import SearchResults from "./Pages/SearchResults";
+import Profile from "./Pages/Profile";
+import ChefAvailable from "./Pages/Chefavailability/chefavailable";
 function App() {
   return (
     <div className="App">
@@ -19,6 +21,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/chefavailablity" element={<ChefAvailability />} />
+          <Route path="/chefavailable" element={<ChefAvailable />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/search-results" element={<SearchResults />} />
         </Routes>

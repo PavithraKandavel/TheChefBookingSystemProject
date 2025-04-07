@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Checkbox, FormControlLabel, Paper, TextField, Typography } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import signupimg from "../../Images/signupimg2.jpg";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
@@ -29,20 +35,25 @@ export default function Login() {
     };
     console.log("login data is --->", data);
     const res = await postApihandler("/userLogin", data);
-    console.log("login api response is ------->", res);
+
     localStorage.setItem("userData", JSON.stringify(res.data));
+    localStorage.setItem("check", "user");
     if (res.status === 200) {
       swal(" Login Successfully");
       navigate("/home");
     } else {
-      swal("Error", res.message || "An unknown error occurred.", "error");
+      swal(
+        "Error",
+        res.error.response.data.message || "An unknown error occurred.",
+        "error"
+      );
     }
   };
 
   // ********* chef login **********
   const [chefemail, setChefEmail] = useState("");
   const [chefpassword, setChefPassword] = useState("");
- 
+
   const chefLogin = async (e) => {
     e.preventDefault();
     const data = {
@@ -51,14 +62,19 @@ export default function Login() {
     };
     console.log("login data --->", data);
     const res = await postApihandler("/chefLogin", data);
-    console.log("login api response is ------->", res);
-   
+
     if (res.status === 200) {
       localStorage.setItem("userData", JSON.stringify(res.data));
+      localStorage.setItem("check", "chef");
+
       swal(" Login Successfully");
       navigate("/chefavailablity");
     } else {
-      swal("Error", res.message || "An unknown error occurred.", "error");
+      swal(
+        "Error",
+        res.error.response.data.message || "An unknown error occurred.",
+        "error"
+      );
     }
   };
 
@@ -71,7 +87,7 @@ export default function Login() {
               <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                   <TabList
-                   variant="fullWidth"
+                    variant="fullWidth"
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                   >
@@ -80,220 +96,230 @@ export default function Login() {
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                <Box
-      sx={{
-        minHeight: "80vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundImage: `url(${signupimg})`, // Ensure correct path
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <Container maxWidth="sm">
-        <Paper
-          elevation={5}
-          sx={{
-            padding: 4,
-            borderRadius: 3,
-            textAlign: "center",
-            maxWidth: 400,
-            margin: "auto",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <Typography variant="h5" fontWeight="bold" gutterBottom>
-            User Login
-          </Typography>
-
-          <form onSubmit={userLogin}>
-            <TextField
-              fullWidth
-              label="Your Email"
-              type="email"
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
-              required
-            />
-
-            <TextField
-              fullWidth
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-              required
-            />
-
-            <FormControlLabel
-              control={<Checkbox />}
-              label={
-                <Typography variant="body2">
-                  I agree to the{" "}
-                  <a href="#" style={{ color: "#03a9f4", fontWeight: 600 }}>
-                    Terms & Conditions
-                  </a>
-                </Typography>
-              }
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              sx={{
-                mt: 2,
-                py: 1.5,
-                fontWeight: "bold",
-                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
-                color: "white",
-                "&:hover": {
-                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
-                },
-              }}
-            >
-              Login
-            </Button>
-          </form>
-
-          <Typography
-                      variant="body2"
-                      textAlign="center"
-                      sx={{
-                        fontFamily: "Inter;",
-                        fontSize: "14px;",
-                        fontWeight: "500",
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      Don't have an account?{" "}
-                      <a
-                        href="/signup"
-                        style={{
-                          textDecoration: "none",
-                          color: "#E3641B",
-                          fontWeight: "700",
+                  <Box
+                    sx={{
+                      minHeight: "80vh",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundImage: `url(${signupimg})`, // Ensure correct path
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <Container maxWidth="sm">
+                      <Paper
+                        elevation={5}
+                        sx={{
+                          padding: 4,
+                          borderRadius: 3,
+                          textAlign: "center",
+                          maxWidth: 400,
+                          margin: "auto",
+                          backdropFilter: "blur(10px)",
                         }}
                       >
-                        Sign Up
-                      </a>
-                    </Typography>
-        </Paper>
-      </Container>
-    </Box>
+                        <Typography variant="h5" fontWeight="bold" gutterBottom>
+                          User Login
+                        </Typography>
+
+                        <form onSubmit={userLogin}>
+                          <TextField
+                            fullWidth
+                            label="Your Email"
+                            type="email"
+                            variant="outlined"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            margin="normal"
+                            required
+                          />
+
+                          <TextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            margin="normal"
+                            required
+                          />
+
+                          <FormControlLabel
+                            control={<Checkbox />}
+                            label={
+                              <Typography variant="body2">
+                                I agree to the{" "}
+                                <a
+                                  href="#"
+                                  style={{ color: "#03a9f4", fontWeight: 600 }}
+                                >
+                                  Terms & Conditions
+                                </a>
+                              </Typography>
+                            }
+                          />
+
+                          <Button
+                            type="submit"
+                            fullWidth
+                            sx={{
+                              mt: 2,
+                              py: 1.5,
+                              fontWeight: "bold",
+                              background:
+                                "linear-gradient(to right, #6dd5ed, #2193b0)",
+                              color: "white",
+                              "&:hover": {
+                                background:
+                                  "linear-gradient(to right, #2193b0, #6dd5ed)",
+                              },
+                            }}
+                          >
+                            Login
+                          </Button>
+                        </form>
+
+                        <Typography
+                          variant="body2"
+                          textAlign="center"
+                          sx={{
+                            fontFamily: "Inter;",
+                            fontSize: "14px;",
+                            fontWeight: "500",
+                            marginTop: "20px",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          Don't have an account?{" "}
+                          <a
+                            href="/signup"
+                            style={{
+                              textDecoration: "none",
+                              color: "#E3641B",
+                              fontWeight: "700",
+                            }}
+                          >
+                            Sign Up
+                          </a>
+                        </Typography>
+                      </Paper>
+                    </Container>
+                  </Box>
                 </TabPanel>
                 <TabPanel value="2">
-                <Box
-      sx={{
-        minHeight: "80vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundImage: `url(${signupimg})`, // Ensure correct path
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <Container maxWidth="sm">
-        <Paper
-          elevation={5}
-          sx={{
-            padding: 4,
-            borderRadius: 3,
-            textAlign: "center",
-            maxWidth: 400,
-            margin: "auto",
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <Typography variant="h5" fontWeight="bold" gutterBottom>
-            Chef Login
-          </Typography>
-
-          <form onSubmit={chefLogin}>
-            <TextField
-              fullWidth
-              label="Your Email"
-              type="email"
-              variant="outlined"
-              value={chefemail}
-              onChange={(e) => setChefEmail(e.target.value)}
-              margin="normal"
-              required
-            />
-
-            <TextField
-              fullWidth
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={chefpassword}
-              onChange={(e) => setChefPassword(e.target.value)}
-              margin="normal"
-              required
-            />
-
-            <FormControlLabel
-              control={<Checkbox />}
-              label={
-                <Typography variant="body2">
-                  I agree to the{" "}
-                  <a href="#" style={{ color: "#03a9f4", fontWeight: 600 }}>
-                    Terms & Conditions
-                  </a>
-                </Typography>
-              }
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              sx={{
-                mt: 2,
-                py: 1.5,
-                fontWeight: "bold",
-                background: "linear-gradient(to right, #6dd5ed, #2193b0)",
-                color: "white",
-                "&:hover": {
-                  background: "linear-gradient(to right, #2193b0, #6dd5ed)",
-                },
-              }}
-            >
-              Login
-            </Button>
-          </form>
-
-          <Typography
-                      variant="body2"
-                      textAlign="center"
-                      sx={{
-                        fontFamily: "Inter;",
-                        fontSize: "14px;",
-                        fontWeight: "500",
-                        marginTop: "20px",
-                        marginBottom: "20px",
-                      }}
-                    >
-                      Don't have an account?{" "}
-                      <a
-                        href="/signup"
-                        style={{
-                          textDecoration: "none",
-                          color: "#E3641B",
-                          fontWeight: "700",
+                  <Box
+                    sx={{
+                      minHeight: "80vh",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundImage: `url(${signupimg})`, // Ensure correct path
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <Container maxWidth="sm">
+                      <Paper
+                        elevation={5}
+                        sx={{
+                          padding: 4,
+                          borderRadius: 3,
+                          textAlign: "center",
+                          maxWidth: 400,
+                          margin: "auto",
+                          backdropFilter: "blur(10px)",
                         }}
                       >
-                        Sign Up
-                      </a>
-                    </Typography>
-        </Paper>
-      </Container>
-    </Box>
+                        <Typography variant="h5" fontWeight="bold" gutterBottom>
+                          Chef Login
+                        </Typography>
+
+                        <form onSubmit={chefLogin}>
+                          <TextField
+                            fullWidth
+                            label="Your Email"
+                            type="email"
+                            variant="outlined"
+                            value={chefemail}
+                            onChange={(e) => setChefEmail(e.target.value)}
+                            margin="normal"
+                            required
+                          />
+
+                          <TextField
+                            fullWidth
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            value={chefpassword}
+                            onChange={(e) => setChefPassword(e.target.value)}
+                            margin="normal"
+                            required
+                          />
+
+                          <FormControlLabel
+                            control={<Checkbox />}
+                            label={
+                              <Typography variant="body2">
+                                I agree to the{" "}
+                                <a
+                                  href="#"
+                                  style={{ color: "#03a9f4", fontWeight: 600 }}
+                                >
+                                  Terms & Conditions
+                                </a>
+                              </Typography>
+                            }
+                          />
+
+                          <Button
+                            type="submit"
+                            fullWidth
+                            sx={{
+                              mt: 2,
+                              py: 1.5,
+                              fontWeight: "bold",
+                              background:
+                                "linear-gradient(to right, #6dd5ed, #2193b0)",
+                              color: "white",
+                              "&:hover": {
+                                background:
+                                  "linear-gradient(to right, #2193b0, #6dd5ed)",
+                              },
+                            }}
+                          >
+                            Login
+                          </Button>
+                        </form>
+
+                        <Typography
+                          variant="body2"
+                          textAlign="center"
+                          sx={{
+                            fontFamily: "Inter;",
+                            fontSize: "14px;",
+                            fontWeight: "500",
+                            marginTop: "20px",
+                            marginBottom: "20px",
+                          }}
+                        >
+                          Don't have an account?{" "}
+                          <a
+                            href="/signup"
+                            style={{
+                              textDecoration: "none",
+                              color: "#E3641B",
+                              fontWeight: "700",
+                            }}
+                          >
+                            Sign Up
+                          </a>
+                        </Typography>
+                      </Paper>
+                    </Container>
+                  </Box>
                 </TabPanel>
               </TabContext>
             </Box>
