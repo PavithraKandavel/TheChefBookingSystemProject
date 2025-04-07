@@ -18,7 +18,6 @@ exports.createAdmin = async (req, res) => {
 
         // Validating email, full name, mobile number, password, and confirm password
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s)/;
 
         if (!admin_Email) {
             return res.status(400).send({ message: "Email is required", status: 400 });
@@ -248,5 +247,28 @@ exports.deleteChef = async (req, res) => {
         return res.status(200).send({ message: 'Chef deleted successfully', status: 200 });
     } catch (error) {
         return res.status(500).send({ message: error.message || 'Error deleting user', status: 500 });
+    }
+};
+
+
+// Get total count of users, vendors, and events
+exports.getTotalCounts = async (req, res) => {
+    try {
+        const totalUsers = await user.countDocuments(); 
+        const totalChefs = await chef.countDocuments(); 
+
+        res.status(200).json({
+            totalUsers,
+            totalChefs,
+            // totalEvents,
+            message: "Counts fetched successfully",
+            status: 200
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error",
+            status: 500,
+            error: error.message
+        });
     }
 };

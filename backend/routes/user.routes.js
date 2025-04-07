@@ -12,5 +12,7 @@ module.exports = (app)=>{
     
     app.get('/api/getMessages', user.getMessages);
 
+    app.get('/api/getUserBookings/:userId', user.getUserBookings);
+
     
 }

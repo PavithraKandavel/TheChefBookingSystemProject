@@ -24,4 +24,6 @@ module.exports = (app)=> {
 
     // Delete chef route
     app.delete('/api/deleteChef/:chefId', admin.deleteChef);
+
+    app.get("/api/totalCounts", admin.getTotalCounts);
 }

@@ -4,19 +4,14 @@ const app = express()
 const bodyParser = require('body-parser');
 const path = require('path')
 
-const http = require('http');
-const https = require('https');
 
-// const multer = require('multer')
+
 const mongoose = require('mongoose')
 const db = require('./models/db.connection.on');
 const { appendFileSync } = require('fs');
 app.use(express.json());
 app.use(bodyParser.json());
 
-// app.use(cors());
-
-//cors option
 let corsOptions = {
     origin: "*"
 };
@@ -28,8 +23,7 @@ app.use('/uploads', express.static('uploads'));
 
 
 db.mongoose.connect(db.url, {
-    // useNewUrlParser:true,
-    // useUnifiedTopology:true,
+    
 }).then(() => {
     console.log("Mongodb Connected");
 })
@@ -48,13 +42,11 @@ require('./routes/admin.routes')(app)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'website')));
 app.use(express.static(path.join(__dirname, 'website/out')))
-// app.use((req, res) => {
-//     res.sendFile(path.join(__dirname, 'index.html'));
-// });
+
 
 app.get('/',function(req,res){
     res.sendFile(path.join(__dirname+'website/out','/index.html'));
-    //__dirname : It will resolve to your project folder.
+    
   });
 
  

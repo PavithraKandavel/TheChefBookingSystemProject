@@ -25,10 +25,7 @@ const messageSchema = new mongoose.Schema({
         type: String, 
         required: true 
     },
-    // timestamp: { 
-    //     type: Date, 
-    //     default: Date.now 
-    // }
+   
     deleteFlag: {
         type: Boolean,
         default: false

@@ -4,6 +4,8 @@ const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
 const user = require('../models/user.model');
+const ChefBooking = require('../models/ChefBooking.model');
+
 
 const Message = require('../models/message.model')
 
@@ -293,9 +295,30 @@ exports.getMessages = async (req, res) => {
 };
 
 
+// api for user to get booked chef's
+exports.getUserBookings = async (req, res) => {
+  try {
+    const { userId } = req.params;
 
+    // Find all bookings for the user that are not deleted
+    const bookings = await ChefBooking.find({ userId, deleteFlag: false })
+      .populate({
+        path: "chefId",
+        select: "chef_Name chefCategory", // Fetch chef's chef_Name and chefCategory
+      })
+      .populate({
+        path: "chefAvailabilityId",
+        // select: "date timeSlot", // Fetch booking details
+      });
 
+    if (!bookings.length) {
+      return res.status(404).json({ message: "No bookings found for this user", status: 404 });
+    }
 
-
+    res.status(200).json({ data: bookings, status: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
 
 

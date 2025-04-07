@@ -4,6 +4,7 @@ const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
 const { chef, ChefAvailability } = require('../models/chef.model');
+const ChefBooking = require('../models/ChefBooking.model');
 
 
 function generateToken(chefid) {
@@ -237,8 +238,7 @@ exports.createChefAvailability = async (req, res) => {
           state,
           city,
           price,
-      chefCategory
-
+          chefCategory
       });
 
       return res.status(200).send({ data: newAvailability, message: "Availability created successfully", status: 200 });
@@ -255,7 +255,8 @@ exports.getChefAvailabilityById = async (req, res) => {
       return res.status(404).json({ message: "No availability found for this chef" });
     }
 
-    res.json(chefAvailability);
+    // res.json(chefAvailability);
+    return res.status(200).send({ data: chefAvailability, message: "Chef Availability get successfully", status: 200 });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
   }
@@ -291,6 +292,7 @@ exports.updateChefAvailability = async (req, res) => {
   }
 };
 
+
 exports.searchChefs = async (req, res) => {
   try {
     const { country, state, city, chefCategory } = req.query;
@@ -300,21 +302,7 @@ exports.searchChefs = async (req, res) => {
     if (country) filters.country = country;
     if (state) filters.state = state;
     if (city) filters.city = city;
-
-    // First, find all chefs matching the category if provided
-    let chefFilter = {};
-    if (chefCategory) chefFilter.category = chefCategory; // Ensure correct field name
-
-    const matchingChefs = await chef.find(chefFilter).select("_id"); // Fetch only chef IDs
-    const chefIds = matchingChefs.map((chef) => chef._id); // Extract chef IDs
-
-    // If a category filter is applied but no matching chefs found, return an empty response
-    if (chefCategory && chefIds.length === 0) {
-      return res.status(200).json({ data: [], message: "No chefs found for this category", status: 200 });
-    }
-
-    // Apply chefId filter only if category was provided and matches
-    if (chefCategory) filters.chefId = { $in: chefIds };
+    if (chefCategory) filters.chefCategory = chefCategory; // Fix: Use chefCategory directly from ChefAvailability
 
     // Find chef availability records
     const chefAvailability = await ChefAvailability.find(filters).populate({
@@ -333,6 +321,76 @@ exports.searchChefs = async (req, res) => {
 };
 
 
+exports.bookChef = async (req, res) => {
+  try {
+    const { userId, chefId, chefAvailabilityId } = req.body;
 
+    if (!userId || !chefId || !chefAvailabilityId ) {
+      return res.status(400).json({ message: "All fields are required", status: 400 });
+    }
+
+    // Check if chef availability exists and is not deleted
+    const chefAvailability = await ChefAvailability.findOne({ _id: chefAvailabilityId, chefId });
+
+    if (!chefAvailability) {
+      return res.status(404).json({ message: "Chef is not available for booking", status: 404 });
+    }
+
+    // Check if a booking already exists and is not deleted
+    const existingBooking = await ChefBooking.findOne({
+      userId,
+      chefId,
+      chefAvailabilityId,
+      deleteFlag: false, // Ignore soft-deleted bookings
+    });
+
+    if (existingBooking) {
+      return res.status(400).json({ message: "You have already booked this chef for this time slot.", status: 400 });
+    }
+
+    // Create a new booking
+    const newBooking = new ChefBooking({
+      userId,
+      chefId,
+      chefAvailabilityId,
+      status: "Pending",
+    });
+
+    await newBooking.save();
+
+    res.status(200).json({booking: newBooking, message: "Chef booked successfully", status: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
+
+
+
+
+// api for chef to get booked by user
+exports.getChefBookings = async (req, res) => {
+  try {
+    const { chefId } = req.params;
+
+    // Find all bookings for the chef that are not deleted
+    const bookings = await ChefBooking.find({ chefId, deleteFlag: false })
+      .populate({
+        path: "userId",
+        select: "user_Name user_Email", // Fetch user details
+      })
+      .populate({
+        path: "chefAvailabilityId",
+        // select: "date timeSlot", // Fetch booking details
+      });
+
+    if (!bookings.length) {
+      return res.status(404).json({ message: "No bookings found for this chef", status: 404 });
+    }
+
+    res.status(200).json({ data: bookings, status: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
 
 

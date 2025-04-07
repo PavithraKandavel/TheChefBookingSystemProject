@@ -52,7 +52,7 @@ const chefAvailabilitySchema = new Schema({
     },
     chefCategory: {
         type: String,
-        required: [true, "Please provide the start time"],
+        required: [true, "Please provide the chef Category"],
     },
     days: {
         type: [String],
