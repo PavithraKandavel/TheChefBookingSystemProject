@@ -17,11 +17,9 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-// import { mainListItems, secondaryListItems } from "./listItems";
 import NestedList from "./NestedList";
 import { alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-// import logo from "../../Images/logo.png";
 function Copyright(props) {
   return (
     <Typography
@@ -94,47 +92,7 @@ export default function LayoutTemplate({ children }) {
     setOpen(!open);
   };
   // **************** search *******************
-  const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.black, 0.5),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.black, 0.25),
-    },
-
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  }));
-
-  const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }));
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "black",
-    width: "100%",
-    "& .MuiInputBase-input": {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create("width"),
-      [theme.breakpoints.up("sm")]: {
-        width: "45ch",
-        "&:focus": {
-          width: "48ch",
-        },
-      },
-    },
-  }));
+ 
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -163,7 +121,7 @@ export default function LayoutTemplate({ children }) {
               {/* <img src={logo} /> */}
               <IconButton color="secondry">
                 <Badge
-                  // badgeContent={4}
+               
                   sx={{
                     backgroundColor: "white",
                     borderRadius: "50%",
@@ -203,7 +161,7 @@ export default function LayoutTemplate({ children }) {
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            // height: "100vh",
+          
             overflow: "auto",
           }}
         >
@@ -217,6 +175,4 @@ export default function LayoutTemplate({ children }) {
   );
 }
 
-// export default function Dashboard() {
-//   // return <DashboardContent />;
-// }
+
