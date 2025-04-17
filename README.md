@@ -44,13 +44,15 @@ The **Chef Booking Web Application** is designed to connect users with professio
    ```
 
 2. **Open the project in VS Code**.
+3. **Navigate to the frontend folder**.
+     cd frontend
 
-3. **Install dependencies**:
+5. **Install dependencies**:
    ```sh
    npm install
    ```
 
-4. **Start the development server**:
+6. **Start the development server**:
    ```sh
    npm start
    ```
