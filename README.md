@@ -46,9 +46,9 @@ The **Chef Booking Web Application** is designed to connect users with professio
 2. **Open the project in VS Code**.
    
 4. **Navigate to the frontend folder**:
-    '''sh
+    ```sh
      cd frontend
-   '''
+   ```
 
 5. **Install dependencies**:
    ```sh
