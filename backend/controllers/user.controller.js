@@ -6,6 +6,9 @@ const ObjectId = require('mongodb').ObjectID;
 const user = require('../models/user.model');
 const ChefBooking = require('../models/ChefBooking.model');
 
+const Review = require("../models/review.model"); 
+const Payment = require("../models/payment.model"); 
+
 
 const Message = require('../models/message.model')
 
@@ -249,7 +252,7 @@ exports.sendMessage = async (req, res) => {
       if (senderType === 'user') {
           senderId = user_Id;
           receiverId = chef_Id;
-      } else if (senderType === 'vendor') {
+      } else if (senderType === 'chef') {
           senderId = chef_Id;
           receiverId = user_Id;
       } else {
@@ -321,4 +324,85 @@ exports.getUserBookings = async (req, res) => {
   }
 };
 
+
+
+// API for user to submit a review
+exports.submitReview = async (req, res) => {
+  try {
+    const { userId, chefId, chefBookingId, rating, reviewText } = req.body;
+
+    // Validate input fields
+    if (!userId || !chefId || !chefBookingId || !rating || !reviewText) {
+      return res.status(400).json({ message: "All fields are required", status: 400 });
+    }
+
+    // Check if booking exists
+    const bookingExists = await ChefBooking.findOne({ _id: chefBookingId, userId, chefId, deleteFlag: false });
+
+    if (!bookingExists) {
+      return res.status(404).json({ message: "Booking not found", status: 404 });
+    }
+
+    // Check if payment exists & is completed for this booking
+    const paymentExists = await Payment.findOne({
+      userId,
+      chefId,
+      chefAvailabilityId: bookingExists.chefAvailabilityId,
+      paymentStatus: "Completed"
+    });
+
+    await ChefBooking.updateOne({ _id: bookingExists._id }, { reviewStatus: true });
+    if (!paymentExists) {
+      return res.status(403).json({ message: "You can only review after completing a payment", status: 403 });
+    }
+
+    // Save review
+    const newReview = new Review({
+      userId,
+      chefId,
+      chefBookingId, // Store booking ID with review
+      rating,
+      reviewText
+    });
+
+    await newReview.save();
+
+    // ✅ Fetch user and chef details
+    const populatedReview = await Review.findById(newReview._id)
+      .populate({ path: "userId", select: "user_Name" })  // Fetch user name
+      .populate({ path: "chefId", select: "chef_Name" })  // Fetch chef name
+      .populate({ path: "chefBookingId", select: "status" }); // Fetch booking status
+
+
+    res.status(200).json({
+      review: populatedReview,
+      message: "Review submitted successfully",
+      status: 200
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
+
+
+// Get reviews submitted by a specific user
+exports.getUserReviews = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const reviews = await Review.find({ userId })
+      .populate({ path: "chefId", select: "chef_Name" })  // Fetch chef name
+      .populate({ path: "chefBookingId", select: "status" }); // Fetch booking status
+
+    if (!reviews.length) {
+      return res.status(404).json({ message: "No reviews found for this user", status: 404 });
+    }
+
+    res.status(200).json({ data: reviews, message: "User reviews fetched successfully", status: 200 });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
 

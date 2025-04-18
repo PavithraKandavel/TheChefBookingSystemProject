@@ -4,7 +4,11 @@ const config = require("../config/auth.config");
 const { Mongoose } = require('mongoose');
 const admin = require('../models/admin.model');
 const user = require("../models/user.model");
-const { chef } = require('../models/chef.model')
+const { chef } = require('../models/chef.model');
+const ChefBooking = require('../models/ChefBooking.model');
+const Review = require('../models/review.model');
+const Notification = require('../models/notification.model');
+
 
 
 function generateToken(userid) {
@@ -272,3 +276,91 @@ exports.getTotalCounts = async (req, res) => {
         });
     }
 };
+
+
+// API for Admin to get all chef bookings
+exports.getAllChefBookings = async (req, res) => {
+    try {
+      // Fetch all bookings (excluding deleted ones)
+      const bookings = await ChefBooking.find({ deleteFlag: false })
+        .populate({
+          path: "userId",
+          select: "user_Name", // Fetch user's name
+        })
+        .populate({
+          path: "chefId",
+          select: "chef_Name chefCategory", // Fetch chef details
+        })
+        .populate({
+          path: "chefAvailabilityId",
+          select: "date timeSlot", // Fetch availability details
+        })
+        .sort({ createdAt: -1 }); // Sort by latest bookings
+  
+      if (!bookings.length) {
+        return res.status(404).json({ message: "No bookings found", status: 404 });
+      }
+  
+      res.status(200).json({ data: bookings, message: 'Chef Bookings data retrieved successfully', status: 200 });
+    } catch (error) {
+      res.status(500).json({ message: error.message, status: 500 });
+    }
+  };
+
+
+  // Get all reviews (Admin)
+exports.getAllReviews = async (req, res) => {
+    try {
+      const reviews = await Review.find()
+        .populate({ path: "userId", select: "user_Name" })  // Fetch user name
+        .populate({ path: "chefId", select: "chef_Name" })  // Fetch chef name
+        .populate({ path: "chefBookingId", select: "status" }); // Fetch booking status
+  
+      if (!reviews.length) {
+        return res.status(404).json({ message: "No reviews found", status: 404 });
+      }
+  
+      res.status(200).json({ data: reviews, message: "All reviews fetched successfully", status: 200 });
+  
+    } catch (error) {
+      res.status(500).json({ message: error.message, status: 500 });
+    }
+  };
+  
+
+exports.getAllNotification = async (req, res) => {
+    try {
+      
+  
+      const alrt = await Notification.find();
+        
+      if (!alrt.length) {
+        return res.status(404).json({ message: "No notification found", status: 404 });
+      }
+  
+      res.status(200).json({ data: alrt, message: "Notification get successfully", status: 200 });
+  
+    } catch (error) {
+      res.status(500).json({ message: error.message, status: 500 });
+    }
+  };
+
+
+exports.getAllCount = async (req, res) => {
+    try {
+        const userCount = await user.countDocuments();
+        const chefCount = await chef.countDocuments();
+        const bookingCount = await ChefBooking.countDocuments();
+        const notificationCount = await Notification.countDocuments();
+    
+        res.status(200).json({
+          userCount,
+          chefCount,
+          bookingCount,
+          notificationCount
+        });
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+        res.status(500).json({ message: 'Error fetching counts', error });
+      }
+  };

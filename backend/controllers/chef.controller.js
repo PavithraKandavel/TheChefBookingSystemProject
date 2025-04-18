@@ -5,7 +5,9 @@ const { Mongoose } = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
 const { chef, ChefAvailability } = require('../models/chef.model');
 const ChefBooking = require('../models/ChefBooking.model');
-
+const user = require('../models/user.model')
+const Review = require('../models/review.model');
+const Notification = require('../models/notification.model');
 
 function generateToken(chefid) {
     return jwt.sign({ id: chefid }, config.secret, { expiresIn: 15552000 });
@@ -335,6 +337,17 @@ exports.bookChef = async (req, res) => {
     if (!chefAvailability) {
       return res.status(404).json({ message: "Chef is not available for booking", status: 404 });
     }
+// Fetch user details
+const userdata = await user.findById(userId);
+if (!userdata) {
+    return res.status(404).json({ message: "User not found." });
+}
+
+// Fetch chef details
+const chefdata = await chef.findById(chefId);
+if (!chefdata) {
+    return res.status(404).json({ message: "chef not found." });
+}
 
     // Check if a booking already exists and is not deleted
     const existingBooking = await ChefBooking.findOne({
@@ -343,6 +356,15 @@ exports.bookChef = async (req, res) => {
       chefAvailabilityId,
       deleteFlag: false, // Ignore soft-deleted bookings
     });
+
+    const notification = new Notification({
+      userId: userId,
+      user_name:userdata.user_Name,
+      chefId: chefId,
+      chef_name:chefdata.chef_Name,
+      message: `User ${userdata.user_Name} booked ${chefdata.chef_Name} chef.`,
+    });
+    await notification.save(); // Save the notification
 
     if (existingBooking) {
       return res.status(400).json({ message: "You have already booked this chef for this time slot.", status: 400 });
@@ -392,5 +414,46 @@ exports.getChefBookings = async (req, res) => {
     res.status(500).json({ message: error.message, status: 500 });
   }
 };
+
+
+// Get reviews for a specific chef
+exports.getChefReviews = async (req, res) => {
+  try {
+    const { chefId } = req.params;
+
+    const reviews = await Review.find({ chefId })
+      .populate({ path: "userId", select: "user_Name" })  // Fetch user name
+      .populate({ path: "chefBookingId", select: "status" }); // Fetch booking status
+
+    if (!reviews.length) {
+      return res.status(404).json({ message: "No reviews found for this chef", status: 404 });
+    }
+
+    res.status(200).json({ data: reviews, message: "Chef reviews get successfully", status: 200 });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
+
+
+// Get notification for a specific chef
+exports.getChefNotification = async (req, res) => {
+  try {
+    const { chefId } = req.params;
+
+    const alrt = await Notification.find({ chefId })
+      
+    if (!alrt.length) {
+      return res.status(404).json({ message: "No notification found for this chef", status: 404 });
+    }
+
+    res.status(200).json({ data: alrt, message: "Chef notification get successfully", status: 200 });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message, status: 500 });
+  }
+};
+
 
 

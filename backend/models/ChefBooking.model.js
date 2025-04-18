@@ -20,6 +20,10 @@ const chefBookingSchema = new mongoose.Schema({
     enum: ["Pending", "Confirmed", "Cancelled"], 
     default: "Pending" 
 },
+reviewStatus:{
+  type: Boolean,
+  default: false  
+},
   deleteFlag: { 
     type: Boolean, 
     default: false 

@@ -14,5 +14,7 @@ module.exports = (app)=>{
 
     app.get('/api/getUserBookings/:userId', user.getUserBookings);
 
-    
+    app.post('/api/submitReview', user.submitReview);
+
+    app.get("/api/getUserReviews/:userId", user.getUserReviews);
 }
