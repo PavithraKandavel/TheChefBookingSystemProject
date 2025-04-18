@@ -6,11 +6,15 @@ const Profile = () => {
   const [role, setRole] = useState("");
 
   useEffect(() => {
+    const check = localStorage.getItem("check");
+    if (check) {
+      setRole(check);
+    }
     const storedUser = JSON.parse(localStorage.getItem("userData"));
     console.log("stored user --->", storedUser);
     if (storedUser) {
       setUserData(storedUser);
-      setRole(storedUser.role);
+
     }
   }, []);
 
@@ -22,23 +26,23 @@ const Profile = () => {
           {role === "user"
             ? "My Profile"
             : role === "chef"
-            ? "Chef Profile"
-            : "Profile"}
+              ? "Chef Profile"
+              : "Profile"}
         </h3>
-
-        {userData ? (
-          <div className="profile-details p-3 border rounded">
-            <p>
+        <div className="profile-details p-3 border rounded">
+          {role === "user"
+            ? <> <p>
               <strong>Name:</strong> {userData.user_Name}
             </p>
-            <p>
-              <strong>Email:</strong> {userData.user_Email}
-            </p>
-            <p>
-              <strong>Phone:</strong> {userData.mobile_no}
-            </p>
-            {role === "chef" && (
-              <>
+              <p>
+                <strong>Email:</strong> {userData.user_Email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {userData.mobile_no}
+              </p>
+            </>
+            : role === "chef"
+              ? <>
                 <p>
                   <strong>Name:</strong> {userData.chef_Name}
                 </p>
@@ -49,11 +53,11 @@ const Profile = () => {
                   <strong>Phone:</strong> {userData.mobile_no}
                 </p>
               </>
-            )}
-          </div>
-        ) : (
-          <p className="text-danger">No user data found. Please log in.</p>
-        )}
+              : <p className="text-danger">No user data found. Please log in.</p>}
+
+
+        </div>
+
       </div>
     </>
   );

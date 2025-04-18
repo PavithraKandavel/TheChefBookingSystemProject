@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getApihandlerByParams, postApihandler } from "../../Apihandler";
 import Header from "../../Components/Header";
 import {
@@ -15,6 +15,7 @@ import swal from "sweetalert";
 
 const SearchResults = () => {
   const location = useLocation();
+  const history = useNavigate();
   const [chefs, setChefs] = useState([]);
   console.log("chefs is", chefs);
   const [loading, setLoading] = useState(true);
@@ -48,7 +49,7 @@ const SearchResults = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userId = userData._id;
 
-  const BookChef = async (chefId, chefAvailabilityId) => {
+  const BookChef = async (chefId, chefAvailabilityId,price) => {
     const item = {
       userId,
       chefId: chefId,
@@ -57,10 +58,9 @@ const SearchResults = () => {
     const res = await postApihandler("/bookChef", item);
     console.log("book chef api res-->", res);
     if (res.status === 200) {
-      swal({
-        icon: "success",
-        title: "Chef booked successfully",
-      });
+      
+      history(`/payment/${chefId}/${chefAvailabilityId}/${price}`);
+      
     } else {
       swal(
         "Error",
@@ -112,7 +112,7 @@ const SearchResults = () => {
                     <div className="mt-3">
                       <Button
                         style={{ backgroundColor: "#8B4513", color: "white" }}
-                        onClick={() => BookChef(chef.chefId._id, chef._id)}
+                        onClick={() => BookChef(chef.chefId._id, chef._id ,chef.price)}
                       >
                         Book Chef
                       </Button>

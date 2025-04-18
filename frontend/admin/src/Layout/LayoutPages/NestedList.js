@@ -10,7 +10,9 @@ import { Link } from "react-router-dom";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import ManIcon from "@mui/icons-material/Man";
-
+import StarIcon from '@mui/icons-material/Star';
+import PaymentIcon from '@mui/icons-material/Payment';
+import BookIcon from '@mui/icons-material/Book';
 export default function NestedList() {
  
  
@@ -51,7 +53,37 @@ export default function NestedList() {
               <ManIcon sx={{ fill: "white" }} />
             </IconButton>
           </ListItemIcon>
-          <ListItemText primary="chef" sx={{ color: "white" }} />
+          <ListItemText primary="Chef" sx={{ color: "white" }} />
+        </ListItemButton>
+      </Link>
+      <Link to="/booking" style={{ textDecoration: "none" }}>
+        <ListItemButton>
+          <ListItemIcon>
+            <IconButton>
+              <BookIcon sx={{ fill: "white" }} />
+            </IconButton>
+          </ListItemIcon>
+          <ListItemText primary="Booking List" sx={{ color: "white" }} />
+        </ListItemButton>
+      </Link>
+      <Link to="/review" style={{ textDecoration: "none" }}>
+        <ListItemButton>
+          <ListItemIcon>
+            <IconButton>
+              <StarIcon sx={{ fill: "white" }} />
+            </IconButton>
+          </ListItemIcon>
+          <ListItemText primary="Review/Rating" sx={{ color: "white" }} />
+        </ListItemButton>
+      </Link>
+      <Link to="/payment" style={{ textDecoration: "none" }}>
+        <ListItemButton>
+          <ListItemIcon>
+            <IconButton>
+              <PaymentIcon sx={{ fill: "white" }} />
+            </IconButton>
+          </ListItemIcon>
+          <ListItemText primary="Payment List" sx={{ color: "white" }} />
         </ListItemButton>
       </Link>
 

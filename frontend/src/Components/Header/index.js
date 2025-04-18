@@ -8,9 +8,12 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Home, Info, Contacts, AccountCircle } from "@mui/icons-material";
+import BookIcon from "@mui/icons-material/Book";
 import { Link } from "react-router-dom";
 import "./Header.css";
-
+import PersonIcon from '@mui/icons-material/Person';
+import PaymentIcon from '@mui/icons-material/Payment';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -41,23 +44,36 @@ const Header = () => {
           <Link to="/home" className="nav-item">
             <Home className="nav-icon" /> Home
           </Link>
-          <Link to="#" className="nav-item">
-            <Info className="nav-icon" /> About Us
-          </Link>
-          <Link to="#" className="nav-item">
-            <Contacts className="nav-icon" /> Contact Us
+          <Link to="/mybookings" className="nav-item">
+            <BookIcon className="nav-icon" /> My Bookings
           </Link>
           {role === "chef" && (
             <Link to="/chefavailable" className="nav-item">
               <Contacts className="nav-icon" /> Chef Availability
             </Link>
           )}
+          {role === "chef" && (
+            <Link to="/my-payment" className="nav-item">
+              <PaymentIcon className="nav-icon" /> My Payment
+            </Link>
+          )}
         </div>
 
         {/* Profile Icon with Dropdown */}
+        <div>
         <IconButton onClick={handleMenuOpen} className="profile-btn">
-          <AccountCircle fontSize="large" />
+          <PersonIcon fontSize="large" />
         </IconButton>
+        {role === "chef" &&
+ <Link to="/notification">
+ <IconButton onClick={handleMenuOpen} className="profile-btn">
+   <NotificationsIcon fontSize="large" />
+ </IconButton>
+ </Link>
+
+        }
+       
+        </div>
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
@@ -69,12 +85,21 @@ const Header = () => {
           >
             <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
           </Link>
+          {role === "chef" && (
+            <Link
+            to={"/review"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <MenuItem onClick={handleMenuClose}>My Review</MenuItem>
+          </Link>
+          )}
           <Link
             to={"/login"}
             style={{ textDecoration: "none", color: "black" }}
           >
             <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
           </Link>
+          
         </Menu>
       </Toolbar>
     </AppBar>

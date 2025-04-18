@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -11,6 +10,12 @@ import LandingPage from "./Pages/LandingPage";
 import SearchResults from "./Pages/SearchResults";
 import Profile from "./Pages/Profile";
 import ChefAvailable from "./Pages/Chefavailability/chefavailable";
+import MyBookings from "./Pages/MyBookings";
+import Chats from "./Pages/Chats";
+import PaymentPage from "./Pages/Payment";
+import MyPayment from "./Pages/Payment/my-payment";
+import Review from "./Pages/Review";
+import Notification from "./Pages/Notification";
 function App() {
   return (
     <div className="App">
@@ -25,6 +30,12 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/search-results" element={<SearchResults />} />
+          <Route path="/mybookings" element={<MyBookings />} />
+          <Route path="/chats/:id" element={<Chats />} />
+          <Route path="/payment/:chefId/:avaibility/:price" element={<PaymentPage />} />
+          <Route path="/my-payment" element={<MyPayment />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/notification" element={<Notification />} />
         </Routes>
       </BrowserRouter>
     </div>

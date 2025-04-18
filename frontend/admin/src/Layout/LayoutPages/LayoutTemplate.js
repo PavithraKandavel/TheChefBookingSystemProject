@@ -118,8 +118,8 @@ export default function LayoutTemplate({ children }) {
               >
                 <MenuIcon sx={{ color: "white" }} />
               </IconButton>
-              {/* <img src={logo} /> */}
               <IconButton color="secondry">
+                <a href="/notification">
                 <Badge
                
                   sx={{
@@ -131,6 +131,8 @@ export default function LayoutTemplate({ children }) {
                 >
                   <NotificationsIcon />
                 </Badge>
+                </a>
+         
               </IconButton>
             </Toolbar>
           </AppBar>
