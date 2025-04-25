@@ -43,49 +43,69 @@ const chefSchema = new Schema({
 });
 
 
-// Chef Availability Schema
 const chefAvailabilitySchema = new Schema({
     chefId: {
-        type: ObjectId,
-        ref: 'Chef', // Reference to the Chef model
-        required: [true, "Chef ID is required"],
+      type: ObjectId,
+      ref: 'Chef',
+      required: [true, "Chef ID is required"],
     },
     chefCategory: {
-        type: String,
-        required: [true, "Please provide the chef Category"],
+      type: String,
+      required: [true, "Please provide the chef Category"],
     },
-    days: {
-        type: [String],
-        enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        required: [true, "Please provide the days of availability"],
-    },
-    startTime: {
-        type: String,
-        required: [true, "Please provide the start time"],
-    },
-    endTime: {
-        type: String,
-        required: [true, "Please provide the end time"],
-    },
+    availability: [
+      {
+        day: {
+          type: String,
+          enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          required: [true, "Day is required"],
+        },
+        startTime: {
+          type: String,
+          required: [true, "Start time is required"],
+        },
+        endTime: {
+          type: String,
+          required: [true, "End time is required"],
+        }
+      }
+    ],
     country: {
-        type: String,
-        required: [true, "Please provide the country"],
+      type: String,
+      required: [true, "Please provide the country"],
     },
     state: {
-        type: String,
-        required: [true, "Please provide the state"],
+      type: String,
+      required: [true, "Please provide the state"],
     },
     city: {
-        type: String,
-        required: [true, "Please provide the city"],
+      type: String,
+      required: [true, "Please provide the city"],
     },
     price: {
-        type: Number,
-        required: [true, "Please provide the price"],
+      type: Number,
+      required: [true, "Please provide the price"],
+    },
+    priceType: {
+      type: String,
+      required: [true, "Please provide the Price Type"],
+    },
+  
+    // ✅ New Fields
+    totalHours: {
+      type: Number,
+      default: 0
+    },
+    totalEarning: {
+      type: Number,
+      default: 0
     }
-}, {
+  
+  }, {
     timestamps: true,
-});
+  });
+  
+  
 
 // Create models
 const chef = mongoose.model("Chef", chefSchema);
